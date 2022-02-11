@@ -13,22 +13,38 @@ import Combine
 class AppModel : ObservableObject {
     
     @ObservedResults(Card.self) var cards
+    @Published var yValues : [CGFloat] = []
+    private(set) var realm : Realm?
     
     init() {
-      
+    
+        openRealm()
+  
         if cards.isEmpty {
             for _ in 0...2 {
                 addCard()
             }
         }
+
+    }
+    
+    func openRealm() {
+        print("open realm")
+        do {
+            
+            self.realm = try Realm()
+            
+        } catch let error {
+            print(error.localizedDescription)
+        }
     }
     
     func setYdragValue(index : Int,nextIndex: Int,value : DragGesture.Value) {
-        
+       
+        if let realm = realm {
+            
             do {
-                
-                let realm = try Realm()
-                
+            
                 try realm.write {
                     cards[index + nextIndex].y = Float(value.translation.height)
                     objectWillChange.send()
@@ -38,45 +54,51 @@ class AppModel : ObservableObject {
                 
                 print(error.localizedDescription)
             }
-   
+            
+        }
     }
 
     func setYtoZero(index : Int,nextIndex: Int) {
-        
-        do {
-            let realm = try Realm()
+       
+        if let realm = realm {
             
-            try realm.write {
-                cards[index + nextIndex].y = 0
-                objectWillChange.send()
+            do {
+                try realm.write {
+                    cards[index + nextIndex].y = 0
+                    objectWillChange.send()
+                }
+                
+            } catch let error {
+                
+                print(error.localizedDescription)
             }
             
-        } catch let error {
-            
-            print(error.localizedDescription)
         }
+        
         
     }
     
     func addCard() {
         
-        do {
-            let realm = try Realm()
+        if let realm = realm {
             
-            let card = Card()
-            
-            card.name = "purple"
-            card.blueColor = 0.7
-            card.greenColor = 0.1
-            card.redColor = 0.4
-            
-            try realm.write {
-                realm.add(card)
+            do {
+                let card = Card()
+                
+                card.name = "purple"
+                card.blueColor = 0.7
+                card.greenColor = 0.1
+                card.redColor = 0.4
+                
+                try realm.write {
+                    realm.add(card)
+                }
+                
+            } catch let error {
+                
+                print(error.localizedDescription)
             }
             
-        } catch let error {
-            
-            print(error.localizedDescription)
         }
         
     }

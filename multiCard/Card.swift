@@ -27,3 +27,4 @@ class Card: Object, ObjectKeyIdentifiable {
 //    var color : Color
 //    var y : CGFloat
 //}
+

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import RealmSwift
 
 struct ContentView: View {
     
@@ -37,31 +38,31 @@ struct ContentView: View {
                             if value.translation.height > 50 {
                                 
                                 swipeDownAnimation = true
- 
+                                
                                 appModel.setYdragValue(index: index, nextIndex: 0, value: value)
-                                
+
                                 appModel.setYdragValue(index: index, nextIndex: 1, value: value)
-  
+
                                 appModel.setYdragValue(index: index, nextIndex: 2, value: value)
-                                
+
                             }
   
                         })
                                     .onEnded({ (value) in
                             
                             swipeDownAnimation = false
-
+                            
                             appModel.setYtoZero(index: index, nextIndex: 0)
 
                             appModel.setYtoZero(index: index, nextIndex: 1)
 
                             appModel.setYtoZero(index: index, nextIndex: 2)
-                            
+
                         }))
                         .animation(.spring(response: 0.7, dampingFraction: 0.75, blendDuration: 0), value: appModel.cards[0].y)
                         .animation(.spring(response: 0.7, dampingFraction: 0.75, blendDuration: 0), value: appModel.cards[1].y)
                         .animation(.spring(response: 0.7, dampingFraction: 0.75, blendDuration: 0), value: appModel.cards[2].y)
-                        
+
                     
                     }
                 }
@@ -69,6 +70,7 @@ struct ContentView: View {
                 
             }
         }
+       
     }
       
 }
